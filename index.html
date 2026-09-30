@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Seraph Widget</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light palette */
+            --page-bg: #fbf9f5;
+            --surface: #ffffff;
+            --surface-soft: #f9f7f2;
+            --surface-hover: #f4f1ea;
+            --text: #2f2e2b;
+            --text-muted: #8c867b;
+            --text-subtle: #9e9990;
+            --text-faint: #b0aba0;
+            --border: #e6e2d8;
+            --border-soft: #f0ece1;
+            --border-strong: #d0cac0;
+            --accent: #3f3e3a;
+            --accent-soft: #d0cac0;
+            --button-bg: #2f2e2b;
+            --button-text: #ffffff;
+            --modal-bg: #ffffff;
+            --input-bg: #f9f7f2;
+        }
+
+        html.seraph-dark {
+            /* Carefully tuned warm dark palette */
+            --page-bg: #171614;
+            --surface: #201f1c;
+            --surface-soft: #272521;
+            --surface-hover: #302e29;
+            --text: #eee9df;
+            --text-muted: #aaa398;
+            --text-subtle: #958f84;
+            --text-faint: #716c64;
+            --border: #38352f;
+            --border-soft: #302e29;
+            --border-strong: #4a463e;
+            --accent: #e2dcd0;
+            --accent-soft: #625d54;
+            --button-bg: #e2dcd0;
+            --button-text: #1b1a18;
+            --modal-bg: #25231f;
+            --input-bg: #1b1a18;
+        }
+
+        html, body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--page-bg) !important;
+            color: var(--text) !important;
+            user-select: none;
+        }
+
+        #widget-container {
+            background: var(--surface) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+            transition:
+                background-color 0.3s ease,
+                border-color 0.3s ease,
+                color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        /* Typography & Element Mapping */
+        #widget-container .text-\[\#2f2e2b\],
+        #widget-container .text-\[\#191919\] {
+            color: var(--text) !important;
+        }
+
+        #widget-container .text-\[\#8c867b\] {
+            color: var(--text-muted) !important;
+        }
+
+        #widget-container .text-\[\#9e9990\] {
+            color: var(--text-subtle) !important;
+        }
+
+        #widget-container .text-\[\#b0aba0\],
+        #widget-container .text-\[\#666\] {
+            color: var(--text-faint) !important;
+        }
+
+        #widget-container .bg-\[\#ffffff\],
+        #widget-container .bg-white {
+            background: var(--surface) !important;
+        }
+
+        #widget-container .bg-\[\#f9f7f2\] {
+            background: var(--surface-soft) !important;
+        }
+
+        #widget-container .border-\[\#e6e2d8\] {
+            border-color: var(--border) !important;
+        }
+
+        #widget-container .border-\[\#f0ece1\] {
+            border-color: var(--border-soft) !important;
+        }
+
+        #widget-container .border-\[\#d0cac0\] {
+            border-color: var(--border-strong) !important;
+        }
+
+        #widget-container .bg-\[\#2f2e2b\] {
+            background: var(--button-bg) !important;
+            color: var(--button-text) !important;
+        }
+
+        #widget-container button:not(.bg-\[\#2f2e2b\]):hover {
+            background: var(--surface-hover) !important;
+        }
+
+        /* Modal Styles */
+        #alarm-modal > div {
+            background: var(--modal-bg) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+
+        #alarm-modal input,
+        #alarm-modal select {
+            background: var(--input-bg) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+
+        #alarm-modal .bg-\[\#2f2e2b\] {
+            background: var(--button-bg) !important;
+            color: var(--button-text) !important;
+        }
+
+        #theme-toggle {
+            color: var(--text-muted) !important;
+            background: transparent !important;
+        }
+
+        #theme-toggle:hover {
+            color: var(--text) !important;
+        }
+
+        .serif-num {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+
+    <div id="widget-container" class="relative w-full max-w-sm bg-[#ffffff] border border-[#e6e2d8] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-between min-h-[260px] backdrop-blur-md">
+        
+        <!-- Top Navigation Bar -->
+        <div class="w-full flex items-center justify-between mb-4 border-b border-[#f0ece1] pb-3">
+            <button id="prev-mode" aria-label="Previous Mode" class="p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path></svg>
+            </button>
+            
+            <div class="flex flex-col items-center">
+                <span id="mode-title" class="text-xs uppercase tracking-[0.2em] font-[Montserrat] font-light text-[#8c867b]">Clock & Alarm</span>
+                <div class="flex space-x-1.5 mt-1">
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#3f3e3a] transition-all"></span>
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"></span>
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"></span>
+                </div>
+            </div>
+
+            <button id="next-mode" aria-label="Next Mode" class="p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
+            </button>
+        </div>
+
+        <!-- Mode 1: Clock & Alarm -->
+        <div id="mode-1" class="mode-view w-full flex flex-col items-center justify-center flex-grow fade-in">
+            <div id="clock-display" class="text-5xl font-light serif-num tracking-wider cursor-pointer hover:opacity-80 transition flex items-baseline" title="Click to set alarm">
+                <span id="hours">00</span><span class="animate-pulse mx-0.5 font-thin">:</span><span id="minutes">00</span><span class="text-xl ml-2 font-[Montserrat] font-light text-[#9e9990]" id="ampm">AM</span>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-center space-x-2 text-xs font-[Montserrat] font-light text-[#8c867b]">
+                <span id="date-display" class="tracking-widest uppercase">Wednesday, Sep 30</span>
+            </div>
+
+            <div id="alarm-status-container" class="mt-4 flex items-center space-x-2 bg-[#f9f7f2] px-3 py-1.5 rounded-full border border-[#f0ece1] transition-all">
+                <svg class="w-3.5 h-3.5 text-[#8c867b]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path></svg>
+                <span id="alarm-text" class="text-[11px] tracking-wide">Alarm: Off</span>
+                <button id="toggle-alarm-modal" class="ml-1 text-[10px] underline hover:text-black cursor-pointer">Set</button>
+            </div>
+        </div>
+
+        <!-- Mode 2: Countdown Timer -->
+        <div id="mode-2" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
+            <div id="timer-display" class="text-5xl font-light serif-num tracking-wider">
+                <span id="t-hours">00</span>:<span id="t-mins">05</span>:<span id="t-secs">00</span>
+            </div>
+            
+            <div id="timer-inputs-container" class="mt-3 flex items-center space-x-2 text-xs font-[Montserrat]">
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="1">+1m</button>
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="5">+5m</button>
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="10">+10m</button>
+                <button id="timer-clear-btn" class="px-2.5 py-1 rounded border border-[#e6e2d8] text-[#9e9990] hover:bg-[#f4f1ea] transition cursor-pointer">Clear</button>
+            </div>
+
+            <div class="mt-4 flex items-center space-x-3">
+                <button id="timer-start" class="px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer">Start</button>
+                <button id="timer-reset" class="px-4 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Reset</button>
+            </div>
+        </div>
+
+        <!-- Mode 3: Analog Stopwatch -->
+        <div id="mode-3" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
+            <div class="relative w-32 h-32 flex items-center justify-center my-1">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="0.8" class="text-[#d0cac0]" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-dasharray="1 20.9" stroke-width="2" class="text-[#a8a296]" />
+                    <circle id="chrono-ring" cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="276.46" stroke-dashoffset="276.46" class="text-[#4f4d48] transition-all duration-100" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="chrono-display" class="text-xl font-light serif-num tracking-tight">00:00.0</span>
+                </div>
+            </div>
+
+            <div class="mt-3 flex items-center space-x-3">
+                <button id="chrono-start" class="px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer">Start</button>
+                <button id="chrono-lap" class="px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Lap</button>
+                <button id="chrono-reset" class="px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Reset</button>
+            </div>
+            <div id="chrono-lap-display" class="text-[11px] font-[Montserrat] text-[#8c867b] h-4 mt-1"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="w-full flex items-center justify-between mt-3 pt-2 border-t border-[#f0ece1] text-[10px] font-[Montserrat] text-[#b0aba0]">
+            <span>Seraph Widget</span>
+            <button id="theme-toggle" type="button" class="transition cursor-pointer" aria-label="Switch theme">Dark</button>
+        </div>
+    </div>
+
+    <!-- Alarm Setup Modal Overlay -->
+    <div id="alarm-modal" class="fixed inset-0 bg-black/20 backdrop-blur-xs flex items-center justify-center hidden z-50">
+        <div class="bg-white border border-[#e6e2d8] rounded-xl p-5 w-64 shadow-lg flex flex-col items-center">
+            <h3 class="text-sm font-[Montserrat] font-light mb-3 uppercase tracking-widest text-[#6c675e]">Set Alarm Time</h3>
+            <div class="flex items-center space-x-2 mb-4">
+                <input type="number" id="alarm-input-hour" min="1" max="12" value="07" class="w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none">
+                <span class="text-xl font-light">:</span>
+                <input type="number" id="alarm-input-min" min="0" max="59" value="00" class="w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none">
+                <select id="alarm-input-ampm" class="text-xs font-[Montserrat] bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1.5 outline-none">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+            <div class="flex space-x-2 w-full">
+                <button id="alarm-save" class="flex-1 py-1.5 text-xs font-[Montserrat] rounded bg-[#2f2e2b] text-white hover:opacity-95 transition cursor-pointer">Set</button>
+                <button id="alarm-cancel" class="flex-1 py-1.5 text-xs font-[Montserrat] rounded border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Cancel</button>
+            </div>
+            <button id="alarm-clear" class="mt-2 text-[11px] text-[#9e9990] underline hover:text-black cursor-pointer">Disable Alarm</button>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+
+        function playChimeSequence() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const repetitions = 3;
+                const repetitionDelay = 1.2;
+
+                for (let r = 0; r < repetitions; r++) {
+                    const loopOffset = r * repetitionDelay;
+                    const now = audioCtx.currentTime + loopOffset;
+                    const frequencies = [659.25, 783.99, 880.00, 1046.50];
+                    const noteDuration = 0.22;
+
+                    frequencies.forEach((freq, index) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + (index * noteDuration));
+
+                        const startTime = now + (index * noteDuration);
+                        gain.gain.setValueAtTime(0, startTime);
+                        gain.gain.linearRampToValueAtTime(0.18, startTime + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration * 1.8);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + noteDuration * 2);
+                    });
+                }
+            } catch (e) {
+                console.log("Audio playback prevented or unsupported", e);
+            }
+        }
+
+        let currentMode = 0;
+        const totalModes = 3;
+        const modeTitles = ["Clock & Alarm", "Countdown Timer", "Analog Stopwatch"];
+        
+        const modeViews = document.querySelectorAll('.mode-view');
+        const modeTitleEl = document.getElementById('mode-title');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function setMode(index) {
+            currentMode = (index + totalModes) % totalModes;
+            modeViews.forEach((view, idx) => {
+                if (idx === currentMode) {
+                    view.classList.remove('hidden');
+                } else {
+                    view.classList.add('hidden');
+                }
+            });
+            modeTitleEl.textContent = modeTitles[currentMode];
+            
+            indicators.forEach((ind, idx) => {
+                if (idx === currentMode) {
+                    ind.className = "indicator w-4 h-1.5 rounded-full bg-[#3f3e3a] dark:bg-[#e0dcd0] transition-all";
+                } else {
+                    ind.className = "indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] dark:bg-[#3a3a3a] transition-all";
+                }
+            });
+        }
+
+        document.getElementById('prev-mode').addEventListener('click', () => setMode(currentMode - 1));
+        document.getElementById('next-mode').addEventListener('click', () => setMode(currentMode + 1));
+
+        let touchStartX = 0;
+        const container = document.getElementById('widget-container');
+        container.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+        container.addEventListener('touchend', e => {
+            let diff = e.changedTouches[0].screenX - touchStartX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) setMode(currentMode - 1);
+                else setMode(currentMode + 1);
+            }
+        }, {passive: true});
+
+        let alarmTime = null;
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const ampmEl = document.getElementById('ampm');
+        const dateDisplayEl = document.getElementById('date-display');
+        const alarmTextEl = document.getElementById('alarm-text');
+
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            
+            h = h % 12;
+            h = h ? h : 12;
+
+            hoursEl.textContent = String(h).padStart(2, '0');
+            minutesEl.textContent = String(m).padStart(2, '0');
+            ampmEl.textContent = ampm;
+
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            dateDisplayEl.textContent = now.toLocaleDateString('en-US', options);
+
+            if (alarmTime && alarmTime.active) {
+                if (alarmTime.hour === h && alarmTime.minute === m && s === 0 && alarmTime.ampm === ampm) {
+                    playChimeSequence();
+                    alarmTime.active = false;
+                    alarmTextEl.textContent = "Alarm Triggered!";
+                    setTimeout(() => { alarmTextEl.textContent = `Alarm: ${String(alarmTime.hour).padStart(2,'0')}:${String(alarmTime.minute).padStart(2,'0')} ${alarmTime.ampm}`; }, 10000);
+                }
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const alarmModal = document.getElementById('alarm-modal');
+        document.getElementById('toggle-alarm-modal').addEventListener('click', () => alarmModal.classList.remove('hidden'));
+        document.getElementById('alarm-cancel').addEventListener('click', () => alarmModal.classList.add('hidden'));
+        
+        document.getElementById('alarm-save').addEventListener('click', () => {
+            const h = parseInt(document.getElementById('alarm-input-hour').value);
+            const m = parseInt(document.getElementById('alarm-input-min').value);
+            const ap = document.getElementById('alarm-input-ampm').value;
+            
+            alarmTime = { hour: h, minute: m, ampm: ap, active: true };
+            alarmTextEl.textContent = `Alarm: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ap}`;
+            alarmModal.classList.add('hidden');
+        });
+
+        document.getElementById('alarm-clear').addEventListener('click', () => {
+            alarmTime = null;
+            alarmTextEl.textContent = "Alarm: Off";
+            alarmModal.classList.add('hidden');
+        });
+
+        let timerSecondsLeft = 300;
+        let timerInterval = null;
+        let timerRunning = false;
+
+        const tHoursEl = document.getElementById('t-hours');
+        const tMinsEl = document.getElementById('t-mins');
+        const tSecsEl = document.getElementById('t-secs');
+        const timerStartBtn = document.getElementById('timer-start');
+
+        function updateTimerDisplay() {
+            const h = Math.floor(timerSecondsLeft / 3600);
+            const m = Math.floor((timerSecondsLeft % 3600) / 60);
+            const s = timerSecondsLeft % 60;
+
+            tHoursEl.textContent = String(h).padStart(2, '0');
+            tMinsEl.textContent = String(m).padStart(2, '0');
+            tSecsEl.textContent = String(s).padStart(2, '0');
+        }
+
+        document.querySelectorAll('.timer-add').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const addMins = parseInt(e.target.getAttribute('data-mins'));
+                timerSecondsLeft += addMins * 60;
+                updateTimerDisplay();
+            });
+        });
+
+        document.getElementById('timer-clear-btn').addEventListener('click', () => {
+            if (timerRunning) return;
+            timerSecondsLeft = 0;
+            updateTimerDisplay();
+        });
+
+        timerStartBtn.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                timerStartBtn.textContent = "Start";
+            } else {
+                if (timerSecondsLeft <= 0) return;
+                timerRunning = true;
+                timerStartBtn.textContent = "Pause";
+                timerInterval = setInterval(() => {
+                    if (timerSecondsLeft > 0) {
+                        timerSecondsLeft--;
+                        updateTimerDisplay();
+                    }
+                    if (timerSecondsLeft === 0) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        timerStartBtn.textContent = "Start";
+                        playChimeSequence();
+                    }
+                }, 1000);
+            }
+        });
+
+        document.getElementById('timer-reset').addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerStartBtn.textContent = "Start";
+            timerSecondsLeft = 300;
+            updateTimerDisplay();
+        });
+        updateTimerDisplay();
+
+        let chronoStartTime = 0;
+        let chronoElapsedTime = 0;
+        let chronoInterval = null;
+        let chronoRunning = false;
+
+        const chronoDisplay = document.getElementById('chrono-display');
+        const chronoStartBtn = document.getElementById('chrono-start');
+        const chronoRing = document.getElementById('chrono-ring');
+        const chronoLapDisplay = document.getElementById('chrono-lap-display');
+
+        function formatChrono(ms) {
+            const totalSecs = Math.floor(ms / 1000);
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            const tenths = Math.floor((ms % 1000) / 100);
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${tenths}`;
+        }
+
+        function updateChrono() {
+            const now = Date.now();
+            chronoElapsedTime = now - chronoStartTime;
+            chronoDisplay.textContent = formatChrono(chronoElapsedTime);
+
+            const secsFraction = (chronoElapsedTime % 60000) / 60000;
+            const dashOffset = 276.46 - (276.46 * secsFraction);
+            chronoRing.style.strokeDashoffset = dashOffset;
+        }
+
+        chronoStartBtn.addEventListener('click', () => {
+            if (chronoRunning) {
+                clearInterval(chronoInterval);
+                chronoRunning = false;
+                chronoStartBtn.textContent = "Start";
+            } else {
+                chronoStartTime = Date.now() - chronoElapsedTime;
+                chronoRunning = true;
+                chronoStartBtn.textContent = "Pause";
+                chronoInterval = setInterval(updateChrono, 50);
+            }
+        });
+
+        document.getElementById('chrono-lap').addEventListener('click', () => {
+            if (!chronoRunning && chronoElapsedTime === 0) return;
+            chronoLapDisplay.textContent = `Lap: ${formatChrono(chronoElapsedTime)}`;
+        });
+
+        document.getElementById('chrono-reset').addEventListener('click', () => {
+            clearInterval(chronoInterval);
+            chronoRunning = false;
+            chronoStartBtn.textContent = "Start";
+            chronoElapsedTime = 0;
+            chronoDisplay.textContent = "00:00.0";
+            chronoRing.style.strokeDashoffset = 276.46;
+            chronoLapDisplay.textContent = "";
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            root.classList.toggle('seraph-dark', isDark);
+
+            themeToggle.textContent = isDark ? '☀' : '⏾';
+            themeToggle.setAttribute(
+                'aria-label',
+                isDark ? 'Switch to light theme' : 'Switch to dark theme'
+            );
+            themeToggle.title = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+        }
+
+        let savedTheme = null;
+        try {
+            savedTheme = localStorage.getItem('seraph-theme');
+        } catch (e) {}
+
+        const systemPrefersDark =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = root.classList.contains('seraph-dark')
+                ? 'light'
+                : 'dark';
+
+            applyTheme(nextTheme);
+
+            try {
+                localStorage.setItem('seraph-theme', nextTheme);
+            } catch (e) {}
+        });
+    </script>
+</body>
+</html>

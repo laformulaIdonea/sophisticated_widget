@@ -1,615 +1,579 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2299.77">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #434343; -webkit-text-stroke: #434343}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #6b006d; -webkit-text-stroke: #6b006d}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #863403; -webkit-text-stroke: #863403}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #0000c2; -webkit-text-stroke: #0000c2}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; -webkit-text-stroke: #000000}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #0f7001; -webkit-text-stroke: #0f7001}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; -webkit-text-stroke: #000000; min-height: 15.0px}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #137e88; -webkit-text-stroke: #137e88}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; color: #fb0007; -webkit-text-stroke: #fb0007}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Verdana; -webkit-text-stroke: #000000; background-color: #ffffff; min-height: 15.0px}
-    span.s1 {font-kerning: none}
-    span.s2 {font-kerning: none; color: #0000c2; -webkit-text-stroke: 0px #0000c2}
-    span.s3 {font-kerning: none; color: #978195; -webkit-text-stroke: 0px #978195}
-    span.s4 {font-kerning: none; color: #863403; -webkit-text-stroke: 0px #863403}
-    span.s5 {font-kerning: none; color: #000000; background-color: #ffffff; -webkit-text-stroke: 0px #000000}
-    span.s6 {font-kerning: none; color: #6b006d; -webkit-text-stroke: 0px #6b006d}
-    span.s7 {font-kerning: none; background-color: #ffffff}
-    span.s8 {font-kerning: none; color: #137e88; -webkit-text-stroke: 0px #137e88}
-    span.s9 {font-kerning: none; color: #000000; -webkit-text-stroke: 0px #000000}
-    span.s10 {font-kerning: none; color: #fb0007; -webkit-text-stroke: 0px #fb0007}
-    span.s11 {font-kerning: none; color: #434343; -webkit-text-stroke: 0px #434343}
-    span.s12 {font-kerning: none; color: #0f7001; -webkit-text-stroke: 0px #0f7001}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Seraph Widget</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light palette */
+            --page-bg: #fbf9f5;
+            --surface: #ffffff;
+            --surface-soft: #f9f7f2;
+            --surface-hover: #f4f1ea;
+            --text: #2f2e2b;
+            --text-muted: #8c867b;
+            --text-subtle: #9e9990;
+            --text-faint: #b0aba0;
+            --border: #e6e2d8;
+            --border-soft: #f0ece1;
+            --border-strong: #d0cac0;
+            --accent: #3f3e3a;
+            --accent-soft: #d0cac0;
+            --button-bg: #2f2e2b;
+            --button-text: #ffffff;
+            --modal-bg: #ffffff;
+            --input-bg: #f9f7f2;
+        }
+
+        html.seraph-dark {
+            /* Carefully tuned warm dark palette */
+            --page-bg: #171614;
+            --surface: #201f1c;
+            --surface-soft: #272521;
+            --surface-hover: #302e29;
+            --text: #eee9df;
+            --text-muted: #aaa398;
+            --text-subtle: #958f84;
+            --text-faint: #716c64;
+            --border: #38352f;
+            --border-soft: #302e29;
+            --border-strong: #4a463e;
+            --accent: #e2dcd0;
+            --accent-soft: #625d54;
+            --button-bg: #e2dcd0;
+            --button-text: #1b1a18;
+            --modal-bg: #25231f;
+            --input-bg: #1b1a18;
+        }
+
+        html, body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--page-bg) !important;
+            color: var(--text) !important;
+            user-select: none;
+        }
+
+        #widget-container {
+            background: var(--surface) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+            transition:
+                background-color 0.3s ease,
+                border-color 0.3s ease,
+                color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        /* Typography & Element Mapping */
+        #widget-container .text-\[\#2f2e2b\],
+        #widget-container .text-\[\#191919\] {
+            color: var(--text) !important;
+        }
+
+        #widget-container .text-\[\#8c867b\] {
+            color: var(--text-muted) !important;
+        }
+
+        #widget-container .text-\[\#9e9990\] {
+            color: var(--text-subtle) !important;
+        }
+
+        #widget-container .text-\[\#b0aba0\],
+        #widget-container .text-\[\#666\] {
+            color: var(--text-faint) !important;
+        }
+
+        #widget-container .bg-\[\#ffffff\],
+        #widget-container .bg-white {
+            background: var(--surface) !important;
+        }
+
+        #widget-container .bg-\[\#f9f7f2\] {
+            background: var(--surface-soft) !important;
+        }
+
+        #widget-container .border-\[\#e6e2d8\] {
+            border-color: var(--border) !important;
+        }
+
+        #widget-container .border-\[\#f0ece1\] {
+            border-color: var(--border-soft) !important;
+        }
+
+        #widget-container .border-\[\#d0cac0\] {
+            border-color: var(--border-strong) !important;
+        }
+
+        #widget-container .bg-\[\#2f2e2b\] {
+            background: var(--button-bg) !important;
+            color: var(--button-text) !important;
+        }
+
+        #widget-container button:not(.bg-\[\#2f2e2b\]):hover {
+            background: var(--surface-hover) !important;
+        }
+
+        /* Modal Styles */
+        #alarm-modal > div {
+            background: var(--modal-bg) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+
+        #alarm-modal input,
+        #alarm-modal select {
+            background: var(--input-bg) !important;
+            border-color: var(--border) !important;
+            color: var(--text) !important;
+        }
+
+        #alarm-modal .bg-\[\#2f2e2b\] {
+            background: var(--button-bg) !important;
+            color: var(--button-text) !important;
+        }
+
+        #theme-toggle {
+            color: var(--text-muted) !important;
+            background: transparent !important;
+        }
+
+        #theme-toggle:hover {
+            color: var(--text) !important;
+        }
+
+        .serif-num {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE </span><span class="s2">html</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">html</span><span class="s3"> </span><span class="s4">lang</span><span class="s3">=</span><span class="s2">"en"</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p3"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s3"> </span><span class="s1">charset</span><span class="s3">=</span><span class="s2">"UTF-8"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s3"> </span><span class="s4">name</span><span class="s3">=</span><span class="s1">"viewport"</span><span class="s3"> </span><span class="s4">content</span><span class="s3">=</span><span class="s1">"width=device-width, initial-scale=1.0"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">title</span><span class="s3">&gt;</span><span class="s7">Notion Seraph Widget</span><span class="s3">&lt;/</span><span class="s6">title</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s3"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://cdn.tailwindcss.com"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">link</span><span class="s3"> </span><span class="s4">href</span><span class="s3">=</span><span class="s1">"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Montserrat:wght@300;400&amp;display=swap"</span><span class="s3"> </span><span class="s4">rel</span><span class="s3">=</span><span class="s1">"stylesheet"</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">style</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">:root</span><span class="s1"> {</span></p>
-<p class="p6"><span class="s9"><span class="Apple-converted-space">            </span></span><span class="s1">/* Light palette */</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--page-bg</span><span class="s1">: #fbf9f5;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface</span><span class="s1">: #ffffff;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface-soft</span><span class="s1">: #f9f7f2;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface-hover</span><span class="s1">: #f4f1ea;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text</span><span class="s1">: #2f2e2b;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-muted</span><span class="s1">: #8c867b;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-subtle</span><span class="s1">: #9e9990;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-faint</span><span class="s1">: #b0aba0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border</span><span class="s1">: #e6e2d8;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border-soft</span><span class="s1">: #f0ece1;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border-strong</span><span class="s1">: #d0cac0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--accent</span><span class="s1">: #3f3e3a;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--accent-soft</span><span class="s1">: #d0cac0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--button-bg</span><span class="s1">: #2f2e2b;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--button-text</span><span class="s1">: #ffffff;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--modal-bg</span><span class="s1">: #ffffff;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--input-bg</span><span class="s1">: #f9f7f2;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p8"><span class="s9"><span class="Apple-converted-space">        </span></span><span class="s1">html.seraph-dark</span><span class="s9"> {</span></p>
-<p class="p6"><span class="s9"><span class="Apple-converted-space">            </span></span><span class="s1">/* Carefully tuned warm dark palette */</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--page-bg</span><span class="s1">: #171614;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface</span><span class="s1">: #201f1c;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface-soft</span><span class="s1">: #272521;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--surface-hover</span><span class="s1">: #302e29;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text</span><span class="s1">: #eee9df;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-muted</span><span class="s1">: #aaa398;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-subtle</span><span class="s1">: #958f84;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--text-faint</span><span class="s1">: #716c64;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border</span><span class="s1">: #38352f;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border-soft</span><span class="s1">: #302e29;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--border-strong</span><span class="s1">: #4a463e;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--accent</span><span class="s1">: #e2dcd0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--accent-soft</span><span class="s1">: #625d54;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--button-bg</span><span class="s1">: #e2dcd0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--button-text</span><span class="s1">: #1b1a18;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--modal-bg</span><span class="s1">: #25231f;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s4">--input-bg</span><span class="s1">: #1b1a18;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">html</span><span class="s1">, </span><span class="s8">body</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">transition</span><span class="s1">: background-color 0.3s ease, color 0.3s ease;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">body</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">font-family</span><span class="s1">: </span><span class="s2">'Cormorant Garamond'</span><span class="s1">, serif;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--page-bg) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">user-select</span><span class="s1">: none;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--surface) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">transition</span><span class="s1">:</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>background-color 0.3s ease,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>border-color 0.3s ease,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>color 0.3s ease,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>box-shadow 0.3s ease;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p6"><span class="s9"><span class="Apple-converted-space">        </span></span><span class="s1">/* Typography &amp; Element Mapping */</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#2f2e2b\]</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#191919\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#8c867b\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text-muted) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#9e9990\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text-subtle) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#b0aba0\]</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.text-</span><span class="s1">\</span><span class="s8">[\#666\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text-faint) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.bg-</span><span class="s1">\</span><span class="s8">[\#ffffff\]</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.bg-white</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--surface) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.bg-</span><span class="s1">\</span><span class="s8">[\#f9f7f2\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--surface-soft) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.border-</span><span class="s1">\</span><span class="s8">[\#e6e2d8\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.border-</span><span class="s1">\</span><span class="s8">[\#f0ece1\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border-soft) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.border-</span><span class="s1">\</span><span class="s8">[\#d0cac0\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border-strong) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">.bg-</span><span class="s1">\</span><span class="s8">[\#2f2e2b\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--button-bg) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--button-text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#widget-container </span><span class="s8">button:not</span><span class="s1">(</span><span class="s8">.bg-</span><span class="s1">\</span><span class="s8">[\#2f2e2b\]</span><span class="s1">)</span><span class="s8">:hover</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--surface-hover) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p6"><span class="s9"><span class="Apple-converted-space">        </span></span><span class="s1">/* Modal Styles */</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#alarm-modal &gt; </span><span class="s8">div</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--modal-bg) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#alarm-modal </span><span class="s8">input</span><span class="s1">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#alarm-modal </span><span class="s8">select</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--input-bg) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">border-color</span><span class="s1">: var(--border) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#alarm-modal </span><span class="s8">.bg-</span><span class="s1">\</span><span class="s8">[\#2f2e2b\]</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: var(--button-bg) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--button-text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#theme-toggle {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text-muted) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">background</span><span class="s1">: transparent </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>#theme-toggle</span><span class="s8">:hover</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">color</span><span class="s1">: var(--text) </span><span class="s11">!important</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">.serif-num</span><span class="s1"> {</span></p>
-<p class="p9"><span class="s9"><span class="Apple-converted-space">            </span></span><span class="s1">font-feature-settings</span><span class="s9">: </span><span class="s2">"tnum"</span><span class="s9">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">font-variant-numeric</span><span class="s1">: tabular-nums;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s8">.fade-in</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s10">animation</span><span class="s1">: fadeIn 0.3s ease-in-out forwards;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">@keyframes</span><span class="s1"> fadeIn {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">from</span><span class="s1"> { </span><span class="s10">opacity</span><span class="s1">: 0; </span><span class="s10">transform</span><span class="s1">: translateY(4px); }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s8">to</span><span class="s1"> { </span><span class="s10">opacity</span><span class="s1">: 1; </span><span class="s10">transform</span><span class="s1">: translateY(0); }</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s9"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">style</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s3">&lt;</span><span class="s6">body</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex items-center justify-center min-h-screen p-4 transition-colors duration-300"</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"widget-container"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"relative w-full max-w-sm bg-[#ffffff] border border-[#e6e2d8] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-between min-h-[260px] backdrop-blur-md"</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Top Navigation Bar --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full flex items-center justify-between mb-4 border-b border-[#f0ece1] pb-3"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"prev-mode"</span><span class="s3"> </span><span class="s4">aria-label</span><span class="s3">=</span><span class="s1">"Previous Mode"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">svg</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-5 h-5"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"1.5"</span><span class="s3"> </span><span class="s4">viewBox</span><span class="s3">=</span><span class="s1">"0 0 24 24"</span><span class="s3">&gt;&lt;</span><span class="s6">path</span><span class="s3"> </span><span class="s4">stroke-linecap</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">stroke-linejoin</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">d</span><span class="s3">=</span><span class="s1">"M15.75 19.5L8.25 12l7.5-7.5"</span><span class="s3">&gt;&lt;/</span><span class="s6">path</span><span class="s3">&gt;&lt;/</span><span class="s6">svg</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex flex-col items-center"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"mode-title"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xs uppercase tracking-[0.2em] font-[Montserrat] font-light text-[#8c867b]"</span><span class="s3">&gt;</span><span class="s5">Clock &amp; Alarm</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex space-x-1.5 mt-1"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"indicator w-1.5 h-1.5 rounded-full bg-[#3f3e3a] transition-all"</span><span class="s3">&gt;&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"</span><span class="s3">&gt;&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"</span><span class="s3">&gt;&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"next-mode"</span><span class="s3"> </span><span class="s4">aria-label</span><span class="s3">=</span><span class="s1">"Next Mode"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">svg</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-5 h-5"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"1.5"</span><span class="s3"> </span><span class="s4">viewBox</span><span class="s3">=</span><span class="s1">"0 0 24 24"</span><span class="s3">&gt;&lt;</span><span class="s6">path</span><span class="s3"> </span><span class="s4">stroke-linecap</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">stroke-linejoin</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">d</span><span class="s3">=</span><span class="s1">"M8.25 4.5l7.5 7.5-7.5 7.5"</span><span class="s3">&gt;&lt;/</span><span class="s6">path</span><span class="s3">&gt;&lt;/</span><span class="s6">svg</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Mode 1: Clock &amp; Alarm --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"mode-1"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mode-view w-full flex flex-col items-center justify-center flex-grow fade-in"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"clock-display"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-5xl font-light serif-num tracking-wider cursor-pointer hover:opacity-80 transition flex items-baseline"</span><span class="s3"> </span><span class="s4">title</span><span class="s3">=</span><span class="s1">"Click to set alarm"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"hours"</span><span class="s3">&gt;</span><span class="s5">00</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"animate-pulse mx-0.5 font-thin"</span><span class="s3">&gt;</span><span class="s5">:</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"minutes"</span><span class="s3">&gt;</span><span class="s5">00</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl ml-2 font-[Montserrat] font-light text-[#9e9990]"</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"ampm"</span><span class="s3">&gt;</span><span class="s5">AM</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-4 flex items-center justify-center space-x-2 text-xs font-[Montserrat] font-light text-[#8c867b]"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"date-display"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"tracking-widest uppercase"</span><span class="s3">&gt;</span><span class="s5">Wednesday, Sep 30</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-status-container"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-4 flex items-center space-x-2 bg-[#f9f7f2] px-3 py-1.5 rounded-full border border-[#f0ece1] transition-all"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">svg</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-3.5 h-3.5 text-[#8c867b]"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"1.5"</span><span class="s3"> </span><span class="s4">viewBox</span><span class="s3">=</span><span class="s1">"0 0 24 24"</span><span class="s3">&gt;&lt;</span><span class="s6">path</span><span class="s3"> </span><span class="s4">stroke-linecap</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">stroke-linejoin</span><span class="s3">=</span><span class="s1">"round"</span><span class="s3"> </span><span class="s4">d</span><span class="s3">=</span><span class="s1">"M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"</span><span class="s3">&gt;&lt;/</span><span class="s6">path</span><span class="s3">&gt;&lt;/</span><span class="s6">svg</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-text"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-[11px] tracking-wide"</span><span class="s3">&gt;</span><span class="s5">Alarm: Off</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"toggle-alarm-modal"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"ml-1 text-[10px] underline hover:text-black cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Set</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Mode 2: Countdown Timer --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"mode-2"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"timer-display"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-5xl font-light serif-num tracking-wider"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"t-hours"</span><span class="s3">&gt;</span><span class="s5">00</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span><span class="s5">:</span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"t-mins"</span><span class="s3">&gt;</span><span class="s5">05</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span><span class="s5">:</span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"t-secs"</span><span class="s3">&gt;</span><span class="s5">00</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"timer-inputs-container"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-3 flex items-center space-x-2 text-xs font-[Montserrat]"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3"> </span><span class="s4">data-mins</span><span class="s3">=</span><span class="s1">"1"</span><span class="s3">&gt;</span><span class="s5">+1m</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3"> </span><span class="s4">data-mins</span><span class="s3">=</span><span class="s1">"5"</span><span class="s3">&gt;</span><span class="s5">+5m</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3"> </span><span class="s4">data-mins</span><span class="s3">=</span><span class="s1">"10"</span><span class="s3">&gt;</span><span class="s5">+10m</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"timer-clear-btn"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-2.5 py-1 rounded border border-[#e6e2d8] text-[#9e9990] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Clear</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-4 flex items-center space-x-3"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"timer-start"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Start</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"timer-reset"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-4 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Reset</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Mode 3: Analog Stopwatch --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"mode-3"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"relative w-32 h-32 flex items-center justify-center my-1"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">svg</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full h-full transform -rotate-90"</span><span class="s3"> </span><span class="s4">viewBox</span><span class="s3">=</span><span class="s1">"0 0 100 100"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">circle</span><span class="s3"> </span><span class="s4">cx</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">cy</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">r</span><span class="s3">=</span><span class="s1">"44"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"0.8"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-[#d0cac0]"</span><span class="s3"> /&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">circle</span><span class="s3"> </span><span class="s4">cx</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">cy</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">r</span><span class="s3">=</span><span class="s1">"40"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-dasharray</span><span class="s3">=</span><span class="s1">"1 20.9"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"2"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-[#a8a296]"</span><span class="s3"> /&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">circle</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-ring"</span><span class="s3"> </span><span class="s4">cx</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">cy</span><span class="s3">=</span><span class="s1">"50"</span><span class="s3"> </span><span class="s4">r</span><span class="s3">=</span><span class="s1">"44"</span><span class="s3"> </span><span class="s4">fill</span><span class="s3">=</span><span class="s1">"none"</span><span class="s3"> </span><span class="s4">stroke</span><span class="s3">=</span><span class="s1">"currentColor"</span><span class="s3"> </span><span class="s4">stroke-width</span><span class="s3">=</span><span class="s1">"1.5"</span><span class="s3"> </span><span class="s4">stroke-dasharray</span><span class="s3">=</span><span class="s1">"276.46"</span><span class="s3"> </span><span class="s4">stroke-dashoffset</span><span class="s3">=</span><span class="s1">"276.46"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-[#4f4d48] transition-all duration-100"</span><span class="s3"> /&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">svg</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"absolute inset-0 flex flex-col items-center justify-center"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-display"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-light serif-num tracking-tight"</span><span class="s3">&gt;</span><span class="s5">00:00.0</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-3 flex items-center space-x-3"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-start"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Start</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-lap"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Lap</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-reset"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Reset</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"chrono-lap-display"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-[11px] font-[Montserrat] text-[#8c867b] h-4 mt-1"</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;!-- Footer --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full flex items-center justify-between mt-3 pt-2 border-t border-[#f0ece1] text-[10px] font-[Montserrat] text-[#b0aba0]"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3">&gt;</span><span class="s7">Seraph Widget</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"theme-toggle"</span><span class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"button"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"transition cursor-pointer"</span><span class="s3"> </span><span class="s4">aria-label</span><span class="s3">=</span><span class="s1">"Switch theme"</span><span class="s3">&gt;</span><span class="s5">Dark</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p6"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Alarm Setup Modal Overlay --&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-modal"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"fixed inset-0 bg-black/20 backdrop-blur-xs flex items-center justify-center hidden z-50"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white border border-[#e6e2d8] rounded-xl p-5 w-64 shadow-lg flex flex-col items-center"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-sm font-[Montserrat] font-light mb-3 uppercase tracking-widest text-[#6c675e]"</span><span class="s3">&gt;</span><span class="s5">Set Alarm Time</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex items-center space-x-2 mb-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">input</span><span class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"number"</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-input-hour"</span><span class="s3"> </span><span class="s4">min</span><span class="s3">=</span><span class="s1">"1"</span><span class="s3"> </span><span class="s4">max</span><span class="s3">=</span><span class="s1">"12"</span><span class="s3"> </span><span class="s4">value</span><span class="s3">=</span><span class="s1">"07"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-light"</span><span class="s3">&gt;</span><span class="s5">:</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">input</span><span class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"number"</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-input-min"</span><span class="s3"> </span><span class="s4">min</span><span class="s3">=</span><span class="s1">"0"</span><span class="s3"> </span><span class="s4">max</span><span class="s3">=</span><span class="s1">"59"</span><span class="s3"> </span><span class="s4">value</span><span class="s3">=</span><span class="s1">"00"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">select</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-input-ampm"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xs font-[Montserrat] bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1.5 outline-none"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">option</span><span class="s3"> </span><span class="s4">value</span><span class="s3">=</span><span class="s2">"AM"</span><span class="s3">&gt;</span><span class="s7">AM</span><span class="s3">&lt;/</span><span class="s6">option</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">option</span><span class="s3"> </span><span class="s4">value</span><span class="s3">=</span><span class="s2">"PM"</span><span class="s3">&gt;</span><span class="s7">PM</span><span class="s3">&lt;/</span><span class="s6">option</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">select</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex space-x-2 w-full"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-save"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex-1 py-1.5 text-xs font-[Montserrat] rounded bg-[#2f2e2b] text-white hover:opacity-95 transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Set</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-cancel"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex-1 py-1.5 text-xs font-[Montserrat] rounded border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Cancel</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s5"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"alarm-clear"</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-2 text-[11px] text-[#9e9990] underline hover:text-black cursor-pointer"</span><span class="s3">&gt;</span><span class="s5">Disable Alarm</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p10"><span class="s1"></span><br></p>
-<p class="p2"><span class="s5"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> audioCtx = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> playChimeSequence() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">try</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (!audioCtx) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>audioCtx = new (</span><span class="s12">window</span><span class="s1">.AudioContext || </span><span class="s12">window</span><span class="s1">.webkitAudioContext)();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (audioCtx.state === </span><span class="s2">'suspended'</span><span class="s1">) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>audioCtx.resume();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">const</span><span class="s1"> repetitions = 3;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">const</span><span class="s1"> repetitionDelay = 1.2;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">for</span><span class="s1"> (</span><span class="s2">let</span><span class="s1"> r = 0; r &lt; repetitions; r++) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">const</span><span class="s1"> loopOffset = r * repetitionDelay;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">const</span><span class="s1"> now = audioCtx.currentTime + loopOffset;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">const</span><span class="s1"> frequencies = [659.25, 783.99, 880.00, 1046.50];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">const</span><span class="s1"> noteDuration = 0.22;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>frequencies.forEach((freq, index) =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s2">const</span><span class="s1"> osc = audioCtx.createOscillator();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s2">const</span><span class="s1"> gain = audioCtx.createGain();</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>osc.type = </span><span class="s2">'sine'</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>osc.frequency.setValueAtTime(freq, now + (index * noteDuration));</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s2">const</span><span class="s1"> startTime = now + (index * noteDuration);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>gain.gain.setValueAtTime(0, startTime);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>gain.gain.linearRampToValueAtTime(0.18, startTime + 0.02);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>gain.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration * 1.8);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>osc.connect(gain);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>gain.connect(audioCtx.destination);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>osc.start(startTime);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>osc.stop(startTime + noteDuration * 2);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s2">catch</span><span class="s1"> (e) {</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">                </span></span><span class="s12">console</span><span class="s9">.log(</span><span class="s1">"Audio playback prevented or unsupported"</span><span class="s9">, e);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> currentMode = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> totalModes = 3;</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">        </span></span><span class="s1">const</span><span class="s9"> modeTitles = [</span><span class="s1">"Clock &amp; Alarm"</span><span class="s9">, </span><span class="s1">"Countdown Timer"</span><span class="s9">, </span><span class="s1">"Analog Stopwatch"</span><span class="s9">];</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> modeViews = </span><span class="s12">document</span><span class="s1">.querySelectorAll(</span><span class="s2">'.mode-view'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> modeTitleEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'mode-title'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> indicators = </span><span class="s12">document</span><span class="s1">.querySelectorAll(</span><span class="s2">'.indicator'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> setMode(index) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>currentMode = (index + totalModes) % totalModes;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>modeViews.forEach((view, idx) =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (idx === currentMode) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>view.classList.remove(</span><span class="s2">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s2">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>view.classList.add(</span><span class="s2">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>modeTitleEl.textContent = modeTitles[currentMode];</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>indicators.forEach((ind, idx) =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (idx === currentMode) {</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">                    </span>ind.className = </span><span class="s1">"indicator w-4 h-1.5 rounded-full bg-[#3f3e3a] dark:bg-[#e0dcd0] transition-all"</span><span class="s9">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>} </span><span class="s2">else</span><span class="s1"> {</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">                    </span>ind.className = </span><span class="s1">"indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] dark:bg-[#3a3a3a] transition-all"</span><span class="s9">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'prev-mode'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; setMode(currentMode - 1));</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'next-mode'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; setMode(currentMode + 1));</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> touchStartX = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> container = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'widget-container'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>container.addEventListener(</span><span class="s2">'touchstart'</span><span class="s1">, e =&gt; { touchStartX = e.changedTouches[0].screenX; }, {</span><span class="s4">passive</span><span class="s1">: </span><span class="s2">true</span><span class="s1">});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>container.addEventListener(</span><span class="s2">'touchend'</span><span class="s1">, e =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">let</span><span class="s1"> diff = e.changedTouches[0].screenX - touchStartX;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (Math.abs(diff) &gt; 50) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (diff &gt; 0) setMode(currentMode - 1);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">else</span><span class="s1"> setMode(currentMode + 1);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}, {</span><span class="s4">passive</span><span class="s1">: </span><span class="s2">true</span><span class="s1">});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> alarmTime = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> hoursEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'hours'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> minutesEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'minutes'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> ampmEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'ampm'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> dateDisplayEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'date-display'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> alarmTextEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-text'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> updateClock() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> now = </span><span class="s2">new</span><span class="s1"> Date();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">let</span><span class="s1"> h = now.getHours();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> m = now.getMinutes();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> s = now.getSeconds();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> ampm = h &gt;= 12 ? </span><span class="s2">'PM'</span><span class="s1"> : </span><span class="s2">'AM'</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>h = h % 12;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>h = h ? h : 12;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>hoursEl.textContent = String(h).padStart(2, </span><span class="s2">'0'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>minutesEl.textContent = String(m).padStart(2, </span><span class="s2">'0'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>ampmEl.textContent = ampm;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> options = { </span><span class="s4">weekday</span><span class="s1">: </span><span class="s2">'long'</span><span class="s1">, </span><span class="s4">month</span><span class="s1">: </span><span class="s2">'short'</span><span class="s1">, </span><span class="s4">day</span><span class="s1">: </span><span class="s2">'numeric'</span><span class="s1"> };</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>dateDisplayEl.textContent = now.toLocaleDateString(</span><span class="s2">'en-US'</span><span class="s1">, options);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (alarmTime &amp;&amp; alarmTime.active) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (alarmTime.hour === h &amp;&amp; alarmTime.minute === m &amp;&amp; s === 0 &amp;&amp; alarmTime.ampm === ampm) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>playChimeSequence();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>alarmTime.active = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>alarmTextEl.textContent = </span><span class="s2">"Alarm Triggered!"</span><span class="s1">;</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">                    </span>setTimeout(() =&gt; { alarmTextEl.textContent = </span><span class="s1">`Alarm: ${String(alarmTime.hour).padStart(2,'0')}:${String(alarmTime.minute).padStart(2,'0')} ${alarmTime.ampm}`</span><span class="s9">; }, 10000);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setInterval(updateClock, 1000);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>updateClock();</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> alarmModal = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-modal'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'toggle-alarm-modal'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; alarmModal.classList.remove(</span><span class="s2">'hidden'</span><span class="s1">));</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-cancel'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; alarmModal.classList.add(</span><span class="s2">'hidden'</span><span class="s1">));</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-save'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> h = parseInt(</span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-input-hour'</span><span class="s1">).value);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> m = parseInt(</span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-input-min'</span><span class="s1">).value);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> ap = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-input-ampm'</span><span class="s1">).value;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>alarmTime = { </span><span class="s4">hour</span><span class="s1">: h, </span><span class="s4">minute</span><span class="s1">: m, </span><span class="s4">ampm</span><span class="s1">: ap, </span><span class="s4">active</span><span class="s1">: </span><span class="s2">true</span><span class="s1"> };</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">            </span>alarmTextEl.textContent = </span><span class="s1">`Alarm: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ap}`</span><span class="s9">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>alarmModal.classList.add(</span><span class="s2">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'alarm-clear'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>alarmTime = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>alarmTextEl.textContent = </span><span class="s2">"Alarm: Off"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>alarmModal.classList.add(</span><span class="s2">'hidden'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> timerSecondsLeft = 300;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> timerInterval = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> timerRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> tHoursEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'t-hours'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> tMinsEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'t-mins'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> tSecsEl = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'t-secs'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> timerStartBtn = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'timer-start'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> updateTimerDisplay() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> h = Math.floor(timerSecondsLeft / 3600);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> m = Math.floor((timerSecondsLeft % 3600) / 60);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> s = timerSecondsLeft % 60;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>tHoursEl.textContent = String(h).padStart(2, </span><span class="s2">'0'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>tMinsEl.textContent = String(m).padStart(2, </span><span class="s2">'0'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>tSecsEl.textContent = String(s).padStart(2, </span><span class="s2">'0'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.querySelectorAll(</span><span class="s2">'.timer-add'</span><span class="s1">).forEach(btn =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>btn.addEventListener(</span><span class="s2">'click'</span><span class="s1">, (e) =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">const</span><span class="s1"> addMins = parseInt(e.target.getAttribute(</span><span class="s2">'data-mins'</span><span class="s1">));</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerSecondsLeft += addMins * 60;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>updateTimerDisplay();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'timer-clear-btn'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (timerRunning) </span><span class="s2">return</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>timerSecondsLeft = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>updateTimerDisplay();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>timerStartBtn.addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (timerRunning) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>clearInterval(timerInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerStartBtn.textContent = </span><span class="s2">"Start"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s2">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">if</span><span class="s1"> (timerSecondsLeft &lt;= 0) </span><span class="s2">return</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerRunning = </span><span class="s2">true</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerStartBtn.textContent = </span><span class="s2">"Pause"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>timerInterval = setInterval(() =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">if</span><span class="s1"> (timerSecondsLeft &gt; 0) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>timerSecondsLeft--;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>updateTimerDisplay();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s2">if</span><span class="s1"> (timerSecondsLeft === 0) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>clearInterval(timerInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>timerRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>timerStartBtn.textContent = </span><span class="s2">"Start"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>playChimeSequence();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>}, 1000);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'timer-reset'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>clearInterval(timerInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>timerRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>timerStartBtn.textContent = </span><span class="s2">"Start"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>timerSecondsLeft = 300;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>updateTimerDisplay();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>updateTimerDisplay();</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> chronoStartTime = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> chronoElapsedTime = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> chronoInterval = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> chronoRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> chronoDisplay = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-display'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> chronoStartBtn = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-start'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> chronoRing = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-ring'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> chronoLapDisplay = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-lap-display'</span><span class="s1">);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> formatChrono(ms) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> totalSecs = Math.floor(ms / 1000);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> mins = Math.floor(totalSecs / 60);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> secs = totalSecs % 60;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> tenths = Math.floor((ms % 1000) / 100);</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">            </span></span><span class="s1">return</span><span class="s9"> </span><span class="s1">`${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${tenths}`</span><span class="s9">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> updateChrono() {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> now = Date.now();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoElapsedTime = now - chronoStartTime;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoDisplay.textContent = formatChrono(chronoElapsedTime);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> secsFraction = (chronoElapsedTime % 60000) / 60000;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> dashOffset = 276.46 - (276.46 * secsFraction);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoRing.style.strokeDashoffset = dashOffset;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>chronoStartBtn.addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (chronoRunning) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>clearInterval(chronoInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoStartBtn.textContent = </span><span class="s2">"Start"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s2">else</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoStartTime = Date.now() - chronoElapsedTime;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoRunning = </span><span class="s2">true</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoStartBtn.textContent = </span><span class="s2">"Pause"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chronoInterval = setInterval(updateChrono, 50);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-lap'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">if</span><span class="s1"> (!chronoRunning &amp;&amp; chronoElapsedTime === 0) </span><span class="s2">return</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoLapDisplay.textContent = </span><span class="s2">`Lap: ${formatChrono(chronoElapsedTime)}`</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'chrono-reset'</span><span class="s1">).addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>clearInterval(chronoInterval);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoRunning = </span><span class="s2">false</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoStartBtn.textContent = </span><span class="s2">"Start"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoElapsedTime = 0;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoDisplay.textContent = </span><span class="s2">"00:00.0"</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoRing.style.strokeDashoffset = 276.46;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>chronoLapDisplay.textContent = </span><span class="s2">""</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> themeToggle = </span><span class="s12">document</span><span class="s1">.getElementById(</span><span class="s2">'theme-toggle'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> root = </span><span class="s12">document</span><span class="s1">.documentElement;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">function</span><span class="s1"> applyTheme(theme) {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> isDark = theme === </span><span class="s2">'dark'</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>root.classList.toggle(</span><span class="s2">'seraph-dark'</span><span class="s1">, isDark);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>themeToggle.textContent = isDark ? </span><span class="s2">'☀'</span><span class="s1"> : </span><span class="s2">'⏾'</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>themeToggle.setAttribute(</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s2">'aria-label'</span><span class="s1">,</span></p>
-<p class="p4"><span class="s9"><span class="Apple-converted-space">                </span>isDark ? </span><span class="s1">'Switch to light theme'</span><span class="s9"> : </span><span class="s1">'Switch to dark theme'</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>themeToggle.title = isDark ? </span><span class="s2">'Switch to light theme'</span><span class="s1"> : </span><span class="s2">'Switch to dark theme'</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">let</span><span class="s1"> savedTheme = </span><span class="s2">null</span><span class="s1">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">try</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>savedTheme = </span><span class="s12">localStorage</span><span class="s1">.getItem(</span><span class="s2">'seraph-theme'</span><span class="s1">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} </span><span class="s2">catch</span><span class="s1"> (e) {}</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s2">const</span><span class="s1"> systemPrefersDark =</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s12">window</span><span class="s1">.matchMedia &amp;&amp;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s12">window</span><span class="s1">.matchMedia(</span><span class="s2">'(prefers-color-scheme: dark)'</span><span class="s1">).matches;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>applyTheme(savedTheme || (systemPrefersDark ? </span><span class="s2">'dark'</span><span class="s1"> : </span><span class="s2">'light'</span><span class="s1">));</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>themeToggle.addEventListener(</span><span class="s2">'click'</span><span class="s1">, () =&gt; {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">const</span><span class="s1"> nextTheme = root.classList.contains(</span><span class="s2">'seraph-dark'</span><span class="s1">)</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>? </span><span class="s2">'light'</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>: </span><span class="s2">'dark'</span><span class="s1">;</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>applyTheme(nextTheme);</span></p>
-<p class="p7"><span class="s1"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s2">try</span><span class="s1"> {</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s12">localStorage</span><span class="s1">.setItem(</span><span class="s2">'seraph-theme'</span><span class="s1">, nextTheme);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} </span><span class="s2">catch</span><span class="s1"> (e) {}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p2"><span class="s9"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+<body class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+
+    <div id="widget-container" class="relative w-full max-w-sm bg-[#ffffff] border border-[#e6e2d8] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-between min-h-[260px] backdrop-blur-md">
+        
+        <!-- Top Navigation Bar -->
+        <div class="w-full flex items-center justify-between mb-4 border-b border-[#f0ece1] pb-3">
+            <button id="prev-mode" aria-label="Previous Mode" class="p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"></path></svg>
+            </button>
+            
+            <div class="flex flex-col items-center">
+                <span id="mode-title" class="text-xs uppercase tracking-[0.2em] font-[Montserrat] font-light text-[#8c867b]">Clock & Alarm</span>
+                <div class="flex space-x-1.5 mt-1">
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#3f3e3a] transition-all"></span>
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"></span>
+                    <span class="indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] transition-all"></span>
+                </div>
+            </div>
+
+            <button id="next-mode" aria-label="Next Mode" class="p-1.5 rounded-full hover:bg-[#f4f1ea] transition text-[#7a756d] cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path></svg>
+            </button>
+        </div>
+
+        <!-- Mode 1: Clock & Alarm -->
+        <div id="mode-1" class="mode-view w-full flex flex-col items-center justify-center flex-grow fade-in">
+            <div id="clock-display" class="text-5xl font-light serif-num tracking-wider cursor-pointer hover:opacity-80 transition flex items-baseline" title="Click to set alarm">
+                <span id="hours">00</span><span class="animate-pulse mx-0.5 font-thin">:</span><span id="minutes">00</span><span class="text-xl ml-2 font-[Montserrat] font-light text-[#9e9990]" id="ampm">AM</span>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-center space-x-2 text-xs font-[Montserrat] font-light text-[#8c867b]">
+                <span id="date-display" class="tracking-widest uppercase">Wednesday, Sep 30</span>
+            </div>
+
+            <div id="alarm-status-container" class="mt-4 flex items-center space-x-2 bg-[#f9f7f2] px-3 py-1.5 rounded-full border border-[#f0ece1] transition-all">
+                <svg class="w-3.5 h-3.5 text-[#8c867b]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"></path></svg>
+                <span id="alarm-text" class="text-[11px] tracking-wide">Alarm: Off</span>
+                <button id="toggle-alarm-modal" class="ml-1 text-[10px] underline hover:text-black cursor-pointer">Set</button>
+            </div>
+        </div>
+
+        <!-- Mode 2: Countdown Timer -->
+        <div id="mode-2" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
+            <div id="timer-display" class="text-5xl font-light serif-num tracking-wider">
+                <span id="t-hours">00</span>:<span id="t-mins">05</span>:<span id="t-secs">00</span>
+            </div>
+            
+            <div id="timer-inputs-container" class="mt-3 flex items-center space-x-2 text-xs font-[Montserrat]">
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="1">+1m</button>
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="5">+5m</button>
+                <button class="timer-add px-3 py-1 rounded border border-[#e6e2d8] hover:bg-[#f4f1ea] transition cursor-pointer" data-mins="10">+10m</button>
+                <button id="timer-clear-btn" class="px-2.5 py-1 rounded border border-[#e6e2d8] text-[#9e9990] hover:bg-[#f4f1ea] transition cursor-pointer">Clear</button>
+            </div>
+
+            <div class="mt-4 flex items-center space-x-3">
+                <button id="timer-start" class="px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer">Start</button>
+                <button id="timer-reset" class="px-4 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Reset</button>
+            </div>
+        </div>
+
+        <!-- Mode 3: Analog Stopwatch -->
+        <div id="mode-3" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
+            <div class="relative w-32 h-32 flex items-center justify-center my-1">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="0.8" class="text-[#d0cac0]" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-dasharray="1 20.9" stroke-width="2" class="text-[#a8a296]" />
+                    <circle id="chrono-ring" cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="276.46" stroke-dashoffset="276.46" class="text-[#4f4d48] transition-all duration-100" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="chrono-display" class="text-xl font-light serif-num tracking-tight">00:00.0</span>
+                </div>
+            </div>
+
+            <div class="mt-3 flex items-center space-x-3">
+                <button id="chrono-start" class="px-5 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full bg-[#2f2e2b] text-white hover:opacity-90 transition cursor-pointer">Start</button>
+                <button id="chrono-lap" class="px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Lap</button>
+                <button id="chrono-reset" class="px-3 py-1.5 text-xs font-[Montserrat] font-light uppercase tracking-wider rounded-full border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Reset</button>
+            </div>
+            <div id="chrono-lap-display" class="text-[11px] font-[Montserrat] text-[#8c867b] h-4 mt-1"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="w-full flex items-center justify-between mt-3 pt-2 border-t border-[#f0ece1] text-[10px] font-[Montserrat] text-[#b0aba0]">
+            <span>Seraph Widget</span>
+            <button id="theme-toggle" type="button" class="transition cursor-pointer" aria-label="Switch theme">Dark</button>
+        </div>
+    </div>
+
+    <!-- Alarm Setup Modal Overlay -->
+    <div id="alarm-modal" class="fixed inset-0 bg-black/20 backdrop-blur-xs flex items-center justify-center hidden z-50">
+        <div class="bg-white border border-[#e6e2d8] rounded-xl p-5 w-64 shadow-lg flex flex-col items-center">
+            <h3 class="text-sm font-[Montserrat] font-light mb-3 uppercase tracking-widest text-[#6c675e]">Set Alarm Time</h3>
+            <div class="flex items-center space-x-2 mb-4">
+                <input type="number" id="alarm-input-hour" min="1" max="12" value="07" class="w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none">
+                <span class="text-xl font-light">:</span>
+                <input type="number" id="alarm-input-min" min="0" max="59" value="00" class="w-14 text-center text-2xl font-light serif-num bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1 outline-none">
+                <select id="alarm-input-ampm" class="text-xs font-[Montserrat] bg-[#f9f7f2] border border-[#e6e2d8] rounded p-1.5 outline-none">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+            <div class="flex space-x-2 w-full">
+                <button id="alarm-save" class="flex-1 py-1.5 text-xs font-[Montserrat] rounded bg-[#2f2e2b] text-white hover:opacity-95 transition cursor-pointer">Set</button>
+                <button id="alarm-cancel" class="flex-1 py-1.5 text-xs font-[Montserrat] rounded border border-[#d0cac0] hover:bg-[#f4f1ea] transition cursor-pointer">Cancel</button>
+            </div>
+            <button id="alarm-clear" class="mt-2 text-[11px] text-[#9e9990] underline hover:text-black cursor-pointer">Disable Alarm</button>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+
+        function playChimeSequence() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const repetitions = 3;
+                const repetitionDelay = 1.2;
+
+                for (let r = 0; r < repetitions; r++) {
+                    const loopOffset = r * repetitionDelay;
+                    const now = audioCtx.currentTime + loopOffset;
+                    const frequencies = [659.25, 783.99, 880.00, 1046.50];
+                    const noteDuration = 0.22;
+
+                    frequencies.forEach((freq, index) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + (index * noteDuration));
+
+                        const startTime = now + (index * noteDuration);
+                        gain.gain.setValueAtTime(0, startTime);
+                        gain.gain.linearRampToValueAtTime(0.18, startTime + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + noteDuration * 1.8);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + noteDuration * 2);
+                    });
+                }
+            } catch (e) {
+                console.log("Audio playback prevented or unsupported", e);
+            }
+        }
+
+        let currentMode = 0;
+        const totalModes = 3;
+        const modeTitles = ["Clock & Alarm", "Countdown Timer", "Analog Stopwatch"];
+        
+        const modeViews = document.querySelectorAll('.mode-view');
+        const modeTitleEl = document.getElementById('mode-title');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function setMode(index) {
+            currentMode = (index + totalModes) % totalModes;
+            modeViews.forEach((view, idx) => {
+                if (idx === currentMode) {
+                    view.classList.remove('hidden');
+                } else {
+                    view.classList.add('hidden');
+                }
+            });
+            modeTitleEl.textContent = modeTitles[currentMode];
+            
+            indicators.forEach((ind, idx) => {
+                if (idx === currentMode) {
+                    ind.className = "indicator w-4 h-1.5 rounded-full bg-[#3f3e3a] dark:bg-[#e0dcd0] transition-all";
+                } else {
+                    ind.className = "indicator w-1.5 h-1.5 rounded-full bg-[#d0cac0] dark:bg-[#3a3a3a] transition-all";
+                }
+            });
+        }
+
+        document.getElementById('prev-mode').addEventListener('click', () => setMode(currentMode - 1));
+        document.getElementById('next-mode').addEventListener('click', () => setMode(currentMode + 1));
+
+        let touchStartX = 0;
+        const container = document.getElementById('widget-container');
+        container.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+        container.addEventListener('touchend', e => {
+            let diff = e.changedTouches[0].screenX - touchStartX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) setMode(currentMode - 1);
+                else setMode(currentMode + 1);
+            }
+        }, {passive: true});
+
+        let alarmTime = null;
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const ampmEl = document.getElementById('ampm');
+        const dateDisplayEl = document.getElementById('date-display');
+        const alarmTextEl = document.getElementById('alarm-text');
+
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            
+            h = h % 12;
+            h = h ? h : 12;
+
+            hoursEl.textContent = String(h).padStart(2, '0');
+            minutesEl.textContent = String(m).padStart(2, '0');
+            ampmEl.textContent = ampm;
+
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            dateDisplayEl.textContent = now.toLocaleDateString('en-US', options);
+
+            if (alarmTime && alarmTime.active) {
+                if (alarmTime.hour === h && alarmTime.minute === m && s === 0 && alarmTime.ampm === ampm) {
+                    playChimeSequence();
+                    alarmTime.active = false;
+                    alarmTextEl.textContent = "Alarm Triggered!";
+                    setTimeout(() => { alarmTextEl.textContent = `Alarm: ${String(alarmTime.hour).padStart(2,'0')}:${String(alarmTime.minute).padStart(2,'0')} ${alarmTime.ampm}`; }, 10000);
+                }
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const alarmModal = document.getElementById('alarm-modal');
+        document.getElementById('toggle-alarm-modal').addEventListener('click', () => alarmModal.classList.remove('hidden'));
+        document.getElementById('alarm-cancel').addEventListener('click', () => alarmModal.classList.add('hidden'));
+        
+        document.getElementById('alarm-save').addEventListener('click', () => {
+            const h = parseInt(document.getElementById('alarm-input-hour').value);
+            const m = parseInt(document.getElementById('alarm-input-min').value);
+            const ap = document.getElementById('alarm-input-ampm').value;
+            
+            alarmTime = { hour: h, minute: m, ampm: ap, active: true };
+            alarmTextEl.textContent = `Alarm: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ap}`;
+            alarmModal.classList.add('hidden');
+        });
+
+        document.getElementById('alarm-clear').addEventListener('click', () => {
+            alarmTime = null;
+            alarmTextEl.textContent = "Alarm: Off";
+            alarmModal.classList.add('hidden');
+        });
+
+        let timerSecondsLeft = 300;
+        let timerInterval = null;
+        let timerRunning = false;
+
+        const tHoursEl = document.getElementById('t-hours');
+        const tMinsEl = document.getElementById('t-mins');
+        const tSecsEl = document.getElementById('t-secs');
+        const timerStartBtn = document.getElementById('timer-start');
+
+        function updateTimerDisplay() {
+            const h = Math.floor(timerSecondsLeft / 3600);
+            const m = Math.floor((timerSecondsLeft % 3600) / 60);
+            const s = timerSecondsLeft % 60;
+
+            tHoursEl.textContent = String(h).padStart(2, '0');
+            tMinsEl.textContent = String(m).padStart(2, '0');
+            tSecsEl.textContent = String(s).padStart(2, '0');
+        }
+
+        document.querySelectorAll('.timer-add').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const addMins = parseInt(e.target.getAttribute('data-mins'));
+                timerSecondsLeft += addMins * 60;
+                updateTimerDisplay();
+            });
+        });
+
+        document.getElementById('timer-clear-btn').addEventListener('click', () => {
+            if (timerRunning) return;
+            timerSecondsLeft = 0;
+            updateTimerDisplay();
+        });
+
+        timerStartBtn.addEventListener('click', () => {
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                timerStartBtn.textContent = "Start";
+            } else {
+                if (timerSecondsLeft <= 0) return;
+                timerRunning = true;
+                timerStartBtn.textContent = "Pause";
+                timerInterval = setInterval(() => {
+                    if (timerSecondsLeft > 0) {
+                        timerSecondsLeft--;
+                        updateTimerDisplay();
+                    }
+                    if (timerSecondsLeft === 0) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        timerStartBtn.textContent = "Start";
+                        playChimeSequence();
+                    }
+                }, 1000);
+            }
+        });
+
+        document.getElementById('timer-reset').addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerStartBtn.textContent = "Start";
+            timerSecondsLeft = 300;
+            updateTimerDisplay();
+        });
+        updateTimerDisplay();
+
+        let chronoStartTime = 0;
+        let chronoElapsedTime = 0;
+        let chronoInterval = null;
+        let chronoRunning = false;
+
+        const chronoDisplay = document.getElementById('chrono-display');
+        const chronoStartBtn = document.getElementById('chrono-start');
+        const chronoRing = document.getElementById('chrono-ring');
+        const chronoLapDisplay = document.getElementById('chrono-lap-display');
+
+        function formatChrono(ms) {
+            const totalSecs = Math.floor(ms / 1000);
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            const tenths = Math.floor((ms % 1000) / 100);
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${tenths}`;
+        }
+
+        function updateChrono() {
+            const now = Date.now();
+            chronoElapsedTime = now - chronoStartTime;
+            chronoDisplay.textContent = formatChrono(chronoElapsedTime);
+
+            const secsFraction = (chronoElapsedTime % 60000) / 60000;
+            const dashOffset = 276.46 - (276.46 * secsFraction);
+            chronoRing.style.strokeDashoffset = dashOffset;
+        }
+
+        chronoStartBtn.addEventListener('click', () => {
+            if (chronoRunning) {
+                clearInterval(chronoInterval);
+                chronoRunning = false;
+                chronoStartBtn.textContent = "Start";
+            } else {
+                chronoStartTime = Date.now() - chronoElapsedTime;
+                chronoRunning = true;
+                chronoStartBtn.textContent = "Pause";
+                chronoInterval = setInterval(updateChrono, 50);
+            }
+        });
+
+        document.getElementById('chrono-lap').addEventListener('click', () => {
+            if (!chronoRunning && chronoElapsedTime === 0) return;
+            chronoLapDisplay.textContent = `Lap: ${formatChrono(chronoElapsedTime)}`;
+        });
+
+        document.getElementById('chrono-reset').addEventListener('click', () => {
+            clearInterval(chronoInterval);
+            chronoRunning = false;
+            chronoStartBtn.textContent = "Start";
+            chronoElapsedTime = 0;
+            chronoDisplay.textContent = "00:00.0";
+            chronoRing.style.strokeDashoffset = 276.46;
+            chronoLapDisplay.textContent = "";
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            root.classList.toggle('seraph-dark', isDark);
+
+            themeToggle.textContent = isDark ? '☀' : '⏾';
+            themeToggle.setAttribute(
+                'aria-label',
+                isDark ? 'Switch to light theme' : 'Switch to dark theme'
+            );
+            themeToggle.title = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+        }
+
+        let savedTheme = null;
+        try {
+            savedTheme = localStorage.getItem('seraph-theme');
+        } catch (e) {}
+
+        const systemPrefersDark =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = root.classList.contains('seraph-dark')
+                ? 'light'
+                : 'dark';
+
+            applyTheme(nextTheme);
+
+            try {
+                localStorage.setItem('seraph-theme', nextTheme);
+            } catch (e) {}
+        });
+    </script>
 </body>
 </html>

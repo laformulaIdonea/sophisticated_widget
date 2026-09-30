@@ -55,7 +55,7 @@
 
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: var(--page-bg) !important;
+            background: transparent !important;
             color: var(--text) !important;
             user-select: none;
         }
@@ -165,7 +165,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
 
-    <div id="widget-container" class="relative w-full max-w-sm bg-[#ffffff] border border-[#e6e2d8] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-between min-h-[260px] backdrop-blur-md">
+    <div id="widget-container" class="relative w-full bg-[#ffffff] border border-[#e6e2d8] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-between min-h-[260px] backdrop-blur-md">
         
         <!-- Top Navigation Bar -->
         <div class="w-full flex items-center justify-between mb-4 border-b border-[#f0ece1] pb-3">
@@ -188,7 +188,7 @@
         </div>
 
         <!-- Mode 1: Clock & Alarm -->
-        <div id="mode-1" class="mode-view w-full flex flex-col items-center justify-center flex-grow fade-in">
+        <div id="mode-1" class="mode-view w-full flex flex-col items-center justify-center flex-grow min-h-[140px] fade-in">
             <div id="clock-display" class="text-5xl font-light serif-num tracking-wider cursor-pointer hover:opacity-80 transition flex items-baseline" title="Click to set alarm">
                 <span id="hours">00</span><span class="animate-pulse mx-0.5 font-thin">:</span><span id="minutes">00</span><span class="text-xl ml-2 font-[Montserrat] font-light text-[#9e9990]" id="ampm">AM</span>
             </div>
@@ -205,7 +205,7 @@
         </div>
 
         <!-- Mode 2: Countdown Timer -->
-        <div id="mode-2" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
+        <div id="mode-2" class="mode-view w-full flex flex-col items-center justify-center flex-grow min-h-[140px] hidden fade-in">
             <div id="timer-display" class="text-5xl font-light serif-num tracking-wider">
                 <span id="t-hours">00</span>:<span id="t-mins">05</span>:<span id="t-secs">00</span>
             </div>
@@ -224,16 +224,9 @@
         </div>
 
         <!-- Mode 3: Analog Stopwatch -->
-        <div id="mode-3" class="mode-view w-full flex flex-col items-center justify-center flex-grow hidden fade-in">
-            <div class="relative w-32 h-32 flex items-center justify-center my-1">
-                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="0.8" class="text-[#d0cac0]" />
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-dasharray="1 20.9" stroke-width="2" class="text-[#a8a296]" />
-                    <circle id="chrono-ring" cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="276.46" stroke-dashoffset="276.46" class="text-[#4f4d48] transition-all duration-100" />
-                </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span id="chrono-display" class="text-xl font-light serif-num tracking-tight">00:00.0</span>
-                </div>
+        <div id="mode-3" class="mode-view w-full flex flex-col items-center justify-center flex-grow min-h-[140px] hidden fade-in">
+            <div class="text-5xl font-light serif-num tracking-wider">
+                <span id="chrono-display">00:00.0</span>
             </div>
 
             <div class="mt-3 flex items-center space-x-3">
@@ -488,7 +481,6 @@
 
         const chronoDisplay = document.getElementById('chrono-display');
         const chronoStartBtn = document.getElementById('chrono-start');
-        const chronoRing = document.getElementById('chrono-ring');
         const chronoLapDisplay = document.getElementById('chrono-lap-display');
 
         function formatChrono(ms) {
@@ -504,9 +496,6 @@
             chronoElapsedTime = now - chronoStartTime;
             chronoDisplay.textContent = formatChrono(chronoElapsedTime);
 
-            const secsFraction = (chronoElapsedTime % 60000) / 60000;
-            const dashOffset = 276.46 - (276.46 * secsFraction);
-            chronoRing.style.strokeDashoffset = dashOffset;
         }
 
         chronoStartBtn.addEventListener('click', () => {
@@ -533,7 +522,6 @@
             chronoStartBtn.textContent = "Start";
             chronoElapsedTime = 0;
             chronoDisplay.textContent = "00:00.0";
-            chronoRing.style.strokeDashoffset = 276.46;
             chronoLapDisplay.textContent = "";
         });
 
